@@ -1,1 +1,1 @@
-web: gunicorn eduplatform.wsgi:application --bind 0.0.0.0:$PORT --workers 2
+web: python manage.py makemigrations users courses attendance exams fees notices api && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn eduplatform.wsgi:application --bind 0.0.0.0:$PORT --workers 2

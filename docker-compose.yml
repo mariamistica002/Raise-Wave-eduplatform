@@ -1,0 +1,112 @@
+services:
+
+  # ── PostgreSQL ────────────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB:       rw_eduplatform
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis ─────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ── Django Backend ────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: on-failure
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py collectstatic --noinput &&
+             gunicorn eduplatform.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 120"
+         
+    volumes:
+      - ./backend:/app
+      - media_files:/app/media
+      - static_files:/app/staticfiles
+    ports:
+      - "8000:8000"
+    environment:
+      SECRET_KEY:           django-rw-eduplatform-secret-key-change-in-production
+      DEBUG:                "True"
+      ALLOWED_HOSTS:        "*"
+      DB_NAME:              rw_eduplatform
+      DB_USER:              postgres
+      DB_PASSWORD:          postgres
+      DB_HOST:              db
+      DB_PORT:              "5432"
+      REDIS_URL:            redis://redis:6379/0
+      CORS_ALLOWED_ORIGINS: http://localhost,http://localhost:3000,http://127.0.0.1
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ── Daphne (WebSocket / ASGI) ─────────────────────────────────────────────
+  daphne:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: on-failure
+    command: python -m daphne -b 0.0.0.0 -p 8001 eduplatform.asgi:application
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8001:8001"
+    environment:
+      SECRET_KEY:   django-rw-eduplatform-secret-key-change-in-production
+      DEBUG:        "True"
+      ALLOWED_HOSTS: "*"
+      DB_NAME:      rw_eduplatform
+      DB_USER:      postgres
+      DB_PASSWORD:  postgres
+      DB_HOST:      db
+      DB_PORT:      "5432"
+      REDIS_URL:    redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ── Nginx (Frontend + Reverse Proxy) ─────────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./frontend:/usr/share/nginx/html:ro
+      - static_files:/usr/share/nginx/staticfiles:ro
+      - media_files:/usr/share/nginx/media:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - daphne
+
+volumes:
+  postgres_data:
+  media_files:
+  static_files:

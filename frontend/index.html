@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RW EduPlatform – RW Software Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0B1A3E;
+    --navy-mid: #162B5C;
+    --gold: #F5A623;
+    --gold-light: #FFC85A;
+    --teal: #00C9A7;
+    --teal-dark: #009B82;
+    --cream: #FDFAF3;
+    --gray: #6B7280;
+    --light-gray: #F4F6FA;
+    --white: #FFFFFF;
+    --text: #1A1F36;
+    --border: rgba(11,26,62,0.1);
+    --radius: 16px;
+    --shadow: 0 8px 40px rgba(11,26,62,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(11,26,62,0.96);
+    backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 68px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--white); text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-badge {
+    background: var(--gold); color: var(--navy);
+    font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+    padding: 2px 7px; border-radius: 20px; text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.75); text-decoration: none;
+    font-size: 14px; font-weight: 400;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold); color: var(--navy);
+    border: none; padding: 9px 22px; border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: background .2s, transform .15s;
+    text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: var(--navy);
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 120px 5% 80px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-bg svg { position: absolute; right: -80px; top: 50%; transform: translateY(-50%); opacity: 0.08; }
+  .hero-orb {
+    position: absolute; border-radius: 50%; pointer-events: none;
+  }
+  .orb1 { width: 600px; height: 600px; top: -200px; right: -100px; background: radial-gradient(circle, rgba(0,201,167,0.15) 0%, transparent 70%); }
+  .orb2 { width: 400px; height: 400px; bottom: -100px; left: 100px; background: radial-gradient(circle, rgba(245,166,35,0.1) 0%, transparent 70%); }
+
+  .hero-content { position: relative; z-index: 2; max-width: 660px; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,201,167,0.12); border: 1px solid rgba(0,201,167,0.25);
+    padding: 6px 14px; border-radius: 20px; margin-bottom: 28px;
+    color: var(--teal); font-size: 13px; font-weight: 500;
+  }
+  .hero-eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--teal); border-radius: 50%; animation: pulse 2s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 5.5vw, 72px);
+    font-weight: 900; line-height: 1.05;
+    color: var(--white); margin-bottom: 24px;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero p {
+    font-size: 18px; line-height: 1.7;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px; margin-bottom: 40px;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--navy);
+    border: none; padding: 14px 32px; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+    cursor: pointer; transition: all .2s; text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,166,35,0.35); }
+  .btn-outline {
+    background: transparent; color: var(--white);
+    border: 1px solid rgba(255,255,255,0.3); padding: 14px 32px; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500;
+    cursor: pointer; transition: all .2s; text-decoration: none; display: inline-block;
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.06); }
+
+  .hero-stats {
+    display: flex; gap: 40px; margin-top: 60px;
+    padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .hero-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px; font-weight: 700; color: var(--white);
+    line-height: 1;
+  }
+  .hero-stat-num span { color: var(--gold); }
+  .hero-stat-label { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+  .hero-mockup {
+    position: absolute; right: 5%; top: 50%;
+    transform: translateY(-50%);
+    width: 42%; max-width: 560px;
+    z-index: 2;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 96px 5%; }
+  .section-eyebrow {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--teal-dark);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 3.5vw, 48px);
+    font-weight: 700; line-height: 1.15;
+    color: var(--navy); margin-bottom: 16px;
+  }
+  .section-subtitle { font-size: 17px; line-height: 1.7; color: var(--gray); max-width: 540px; }
+  .section-header { margin-bottom: 56px; }
+  .section-header.centered { text-align: center; }
+  .section-header.centered .section-subtitle { margin: 0 auto; }
+
+  /* ── FEATURES ── */
+  .features { background: var(--white); }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+  }
+  .feature-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+    position: relative; overflow: hidden;
+  }
+  .feature-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--teal), var(--gold));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .3s ease;
+  }
+  .feature-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: transparent; }
+  .feature-card:hover::before { transform: scaleX(1); }
+  .feature-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; font-size: 24px;
+  }
+  .icon-teal { background: rgba(0,201,167,0.12); color: var(--teal-dark); }
+  .icon-gold { background: rgba(245,166,35,0.12); color: #C47D0E; }
+  .icon-navy { background: rgba(11,26,62,0.08); color: var(--navy); }
+  .icon-purple { background: rgba(124,58,237,0.08); color: #7C3AED; }
+  .feature-card h3 { font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 10px; }
+  .feature-card p { font-size: 14px; line-height: 1.65; color: var(--gray); }
+
+  /* ── HOW IT WORKS ── */
+  .how { background: var(--navy); }
+  .how .section-title { color: var(--white); }
+  .how .section-eyebrow { color: var(--teal); }
+  .how .section-subtitle { color: rgba(255,255,255,0.6); }
+  .steps { display: flex; flex-direction: column; gap: 0; margin-top: 60px; }
+  .step {
+    display: grid; grid-template-columns: 72px 1fr;
+    gap: 28px; align-items: flex-start;
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(245,166,35,0.12); border: 2px solid rgba(245,166,35,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 700; color: var(--gold);
+    flex-shrink: 0;
+  }
+  .step-content h3 { font-size: 20px; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+  .step-content p { font-size: 15px; line-height: 1.65; color: rgba(255,255,255,0.55); }
+
+  /* ── FOR WHO ── */
+  .audience { background: var(--light-gray); }
+  .audience-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  .audience-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 36px 24px;
+    text-align: center;
+    border: 1px solid var(--border);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .audience-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .audience-emoji { font-size: 44px; margin-bottom: 16px; display: block; }
+  .audience-card h3 { font-size: 17px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+  .audience-card p { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+  /* ── TECH STACK ── */
+  .stack { background: var(--white); }
+  .stack-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+  .stack-pill {
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: 40px; padding: 10px 22px;
+    font-size: 14px; font-weight: 500; color: var(--navy);
+    display: flex; align-items: center; gap: 8px;
+    transition: all .2s;
+  }
+  .stack-pill:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+  .stack-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-react { background: #61DAFB; }
+  .dot-django { background: #0C3847; }
+  .dot-pg { background: #336791; }
+  .dot-js { background: #F7DF1E; }
+  .dot-html { background: #E34F26; }
+  .dot-css { background: #1572B6; }
+  .dot-cloud { background: #4FC3F7; }
+  .dot-api { background: #00C9A7; }
+
+  /* ── DASHBOARD PREVIEW ── */
+  .preview { background: var(--navy); overflow: hidden; }
+  .preview .section-title { color: var(--white); }
+  .preview .section-eyebrow { color: var(--teal); }
+  .preview .section-subtitle { color: rgba(255,255,255,0.6); }
+  .dashboard-mockup {
+    background: #0D2145;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    margin-top: 48px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  }
+  .db-topbar {
+    background: #0B1A3E;
+    padding: 14px 24px;
+    display: flex; align-items: center; gap: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .db-dots { display: flex; gap: 7px; }
+  .db-dot { width: 11px; height: 11px; border-radius: 50%; }
+  .db-dot.r { background: #FF5F57; }
+  .db-dot.y { background: #FFBD2E; }
+  .db-dot.g { background: #28CA41; }
+  .db-bar {
+    flex: 1; background: rgba(255,255,255,0.06);
+    border-radius: 6px; height: 28px;
+    display: flex; align-items: center; padding: 0 12px;
+    font-size: 12px; color: rgba(255,255,255,0.3); font-family: 'DM Mono', monospace;
+  }
+  .db-body { display: flex; }
+  .db-sidebar {
+    width: 200px; background: #0B1A3E;
+    padding: 20px 0;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+  .db-nav-item {
+    padding: 10px 20px;
+    font-size: 13px; color: rgba(255,255,255,0.45);
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer; transition: all .2s;
+  }
+  .db-nav-item.active { color: var(--gold); background: rgba(245,166,35,0.08); border-right: 2px solid var(--gold); }
+  .db-nav-item:hover:not(.active) { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.04); }
+  .db-nav-icon { width: 16px; text-align: center; font-size: 14px; }
+  .db-main { flex: 1; padding: 24px; overflow: hidden; }
+  .db-greeting { font-size: 18px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .db-date { font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 20px; }
+  .db-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .db-metric {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; padding: 14px;
+  }
+  .db-metric-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+  .db-metric-num { font-size: 22px; font-weight: 600; color: var(--white); }
+  .db-metric-change { font-size: 11px; color: var(--teal); margin-top: 3px; }
+  .db-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .db-panel {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; padding: 16px;
+  }
+  .db-panel-title { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.7); margin-bottom: 14px; }
+  .db-student { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .db-student:last-child { border-bottom: none; }
+  .db-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 600;
+  }
+  .av1 { background: rgba(0,201,167,0.2); color: var(--teal); }
+  .av2 { background: rgba(245,166,35,0.2); color: var(--gold); }
+  .av3 { background: rgba(124,58,237,0.15); color: #A78BFA; }
+  .av4 { background: rgba(239,68,68,0.15); color: #FCA5A5; }
+  .db-student-name { font-size: 12px; color: rgba(255,255,255,0.8); flex: 1; }
+  .db-student-score { font-size: 12px; color: var(--teal); font-weight: 500; }
+  .db-bar-row { margin-bottom: 10px; }
+  .db-bar-label { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 11px; color: rgba(255,255,255,0.5); }
+  .db-bar-track { height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+  .db-bar-fill { height: 100%; border-radius: 3px; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { background: var(--cream); }
+  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  .testi-card {
+    background: var(--white); border-radius: var(--radius);
+    padding: 32px; border: 1px solid var(--border);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .testi-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .testi-quote {
+    font-size: 15px; line-height: 1.7; color: var(--gray);
+    margin-bottom: 24px; font-style: italic;
+  }
+  .testi-quote::before { content: '"'; font-size: 48px; color: var(--teal); line-height: 1; display: block; margin-bottom: -8px; font-family: 'Playfair Display', serif; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 600; color: var(--white);
+    flex-shrink: 0;
+  }
+  .tav1 { background: linear-gradient(135deg, var(--teal-dark), var(--teal)); }
+  .tav2 { background: linear-gradient(135deg, #7C3AED, #A78BFA); }
+  .tav3 { background: linear-gradient(135deg, var(--navy-mid), var(--navy)); }
+  .testi-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .testi-role { font-size: 12px; color: var(--gray); }
+  .stars { color: var(--gold); font-size: 13px; margin-bottom: 16px; letter-spacing: 2px; }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--navy);
+    text-align: center;
+    padding: 100px 5%;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,201,167,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .cta-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    color: var(--white); font-weight: 700;
+    margin-bottom: 18px; line-height: 1.15;
+    position: relative; z-index: 1;
+  }
+  .cta-section h2 em { color: var(--gold); font-style: normal; }
+  .cta-section p {
+    font-size: 17px; color: rgba(255,255,255,0.6);
+    margin-bottom: 40px; max-width: 480px; margin-left: auto; margin-right: auto;
+    line-height: 1.7; position: relative; z-index: 1;
+  }
+  .cta-section .cta-actions { position: relative; z-index: 1; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .cta-email-row {
+    display: flex; gap: 0; max-width: 420px; margin: 0 auto 20px;
+    position: relative; z-index: 1;
+  }
+  .cta-input {
+    flex: 1; padding: 14px 18px; border-radius: 10px 0 0 10px;
+    border: 1px solid rgba(255,255,255,0.15); border-right: none;
+    background: rgba(255,255,255,0.08); color: var(--white);
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    outline: none;
+  }
+  .cta-input::placeholder { color: rgba(255,255,255,0.35); }
+  .cta-input:focus { border-color: rgba(0,201,167,0.5); }
+  .cta-submit {
+    background: var(--gold); color: var(--navy);
+    border: none; padding: 14px 24px;
+    border-radius: 0 10px 10px 0;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: background .2s; white-space: nowrap;
+  }
+  .cta-submit:hover { background: var(--gold-light); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #07112E;
+    color: rgba(255,255,255,0.6);
+    padding: 60px 5% 36px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px; margin-bottom: 48px;
+  }
+  .footer-brand h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700; color: var(--white);
+    margin-bottom: 12px;
+  }
+  .footer-brand h3 span { color: var(--gold); }
+  .footer-brand p { font-size: 13px; line-height: 1.7; max-width: 280px; }
+  .footer-col h4 { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 16px; letter-spacing: 0.04em; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 13px; transition: color .2s; }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding-top: 24px; display: flex;
+    justify-content: space-between; align-items: center;
+    font-size: 12px; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom a { color: rgba(255,255,255,0.4); text-decoration: none; }
+  .footer-bottom a:hover { color: var(--gold); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in {
+    animation: fadeInUp 0.7s ease forwards;
+    opacity: 0;
+  }
+  .delay-1 { animation-delay: .1s; }
+  .delay-2 { animation-delay: .25s; }
+  .delay-3 { animation-delay: .4s; }
+  .delay-4 { animation-delay: .55s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-mockup { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .db-metrics { grid-template-columns: repeat(2, 1fr); }
+    .db-row { grid-template-columns: 1fr; }
+    .db-sidebar { width: 160px; }
+  }
+  @media (max-width: 600px) {
+    nav { padding: 0 4%; }
+    .nav-links { display: none; }
+    section { padding: 72px 5%; }
+    .hero-stats { flex-wrap: wrap; gap: 24px; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .db-sidebar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">RW <span>Edu</span> <span class="nav-badge">Platform</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#preview">Dashboard</a></li>
+    <li><a href="#stack">Technology</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="hero-orb orb1"></div>
+    <div class="hero-orb orb2"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow animate-in">Smart Digital Learning Platform</div>
+    <h1 class="animate-in delay-1">Transform Education with <em>Intelligent</em> Technology</h1>
+    <p class="animate-in delay-2">RW Software Development builds powerful, user-friendly educational platforms for schools, colleges, institutes, and coaching centers — combining modern design with smart academic management.</p>
+    <div class="hero-actions animate-in delay-3">
+      <a href="#contact" class="btn-primary">Request a Demo</a>
+      <a href="#features" class="btn-outline">Explore Features</a>
+    </div>
+    <div class="hero-stats animate-in delay-4">
+      <div>
+        <div class="hero-stat-num">500<span>+</span></div>
+        <div class="hero-stat-label">Institutions Served</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">1.2<span>M</span></div>
+        <div class="hero-stat-label">Active Students</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">99.9<span>%</span></div>
+        <div class="hero-stat-label">Uptime Guarantee</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard floating preview in hero -->
+  <div class="hero-mockup animate-in delay-2">
+    <div class="dashboard-mockup" style="margin-top: 0;">
+      <div class="db-topbar">
+        <div class="db-dots">
+          <div class="db-dot r"></div><div class="db-dot y"></div><div class="db-dot g"></div>
+        </div>
+        <div class="db-bar">app.rweduplatform.com/dashboard</div>
+      </div>
+      <div class="db-body">
+        <div class="db-sidebar">
+          <div class="db-nav-item active"><span class="db-nav-icon">◈</span> Dashboard</div>
+          <div class="db-nav-item"><span class="db-nav-icon">◉</span> Students</div>
+          <div class="db-nav-item"><span class="db-nav-icon">◫</span> Courses</div>
+          <div class="db-nav-item"><span class="db-nav-icon">◷</span> Attendance</div>
+          <div class="db-nav-item"><span class="db-nav-icon">◌</span> Tests</div>
+          <div class="db-nav-item"><span class="db-nav-icon">◱</span> Assignments</div>
+          <div class="db-nav-item"><span class="db-nav-icon">◎</span> Reports</div>
+          <div class="db-nav-item"><span class="db-nav-icon">◈</span> Messages</div>
+        </div>
+        <div class="db-main">
+          <div class="db-greeting">Good morning, Dr. Rahman 👋</div>
+          <div class="db-date">Monday, June 3, 2025 — Summer Term</div>
+          <div class="db-metrics">
+            <div class="db-metric">
+              <div class="db-metric-label">Total Students</div>
+              <div class="db-metric-num">1,248</div>
+              <div class="db-metric-change">↑ 12 new this week</div>
+            </div>
+            <div class="db-metric">
+              <div class="db-metric-label">Courses Active</div>
+              <div class="db-metric-num">64</div>
+              <div class="db-metric-change">↑ 3 added</div>
+            </div>
+            <div class="db-metric">
+              <div class="db-metric-label">Today's Attend.</div>
+              <div class="db-metric-num">87%</div>
+              <div class="db-metric-change" style="color: #F5A623;">↓ 2%</div>
+            </div>
+            <div class="db-metric">
+              <div class="db-metric-label">Assignments Due</div>
+              <div class="db-metric-num">18</div>
+              <div class="db-metric-change">Due today</div>
+            </div>
+          </div>
+          <div class="db-row">
+            <div class="db-panel">
+              <div class="db-panel-title">Top Performers</div>
+              <div class="db-student">
+                <div class="db-avatar av1">AR</div>
+                <div class="db-student-name">Ayesha Rahman</div>
+                <div class="db-student-score">98.2%</div>
+              </div>
+              <div class="db-student">
+                <div class="db-avatar av2">KP</div>
+                <div class="db-student-name">Kiran Patel</div>
+                <div class="db-student-score">96.7%</div>
+              </div>
+              <div class="db-student">
+                <div class="db-avatar av3">MS</div>
+                <div class="db-student-name">Mohammed Siddiq</div>
+                <div class="db-student-score">95.1%</div>
+              </div>
+              <div class="db-student">
+                <div class="db-avatar av4">PJ</div>
+                <div class="db-student-name">Priya Joshi</div>
+                <div class="db-student-score">94.8%</div>
+              </div>
+            </div>
+            <div class="db-panel">
+              <div class="db-panel-title">Course Completion</div>
+              <div class="db-bar-row">
+                <div class="db-bar-label"><span>Mathematics XII</span><span>82%</span></div>
+                <div class="db-bar-track"><div class="db-bar-fill" style="width:82%; background: var(--teal);"></div></div>
+              </div>
+              <div class="db-bar-row">
+                <div class="db-bar-label"><span>Physics Adv.</span><span>71%</span></div>
+                <div class="db-bar-track"><div class="db-bar-fill" style="width:71%; background: var(--gold);"></div></div>
+              </div>
+              <div class="db-bar-row">
+                <div class="db-bar-label"><span>Chemistry</span><span>90%</span></div>
+                <div class="db-bar-track"><div class="db-bar-fill" style="width:90%; background: #A78BFA;"></div></div>
+              </div>
+              <div class="db-bar-row">
+                <div class="db-bar-label"><span>Biology</span><span>65%</span></div>
+                <div class="db-bar-track"><div class="db-bar-fill" style="width:65%; background: #F87171;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-header centered">
+    <div class="section-eyebrow">Platform Features</div>
+    <h2 class="section-title">Everything Your Institution Needs</h2>
+    <p class="section-subtitle">A complete digital ecosystem built to manage, engage, and empower every member of your academic community.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon icon-teal">🎓</div>
+      <h3>Student & Staff Login</h3>
+      <p>Secure role-based authentication with separate portals for students, teachers, administrators, and parents. Two-factor authentication and SSO support.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-gold">📚</div>
+      <h3>Course & Material Upload</h3>
+      <p>Upload lectures, PDFs, videos, and resources with structured course organization. Supports live streaming, recorded sessions, and multi-format content.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-navy">📋</div>
+      <h3>Attendance Management</h3>
+      <p>Automated digital attendance with QR code, biometric, and manual options. Real-time reports for parents and instant low-attendance alerts.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-purple">📝</div>
+      <h3>Online Tests & Exams</h3>
+      <p>Create MCQ, descriptive, and mixed-format tests with timer controls, anti-cheating measures, instant grading, and detailed performance analytics.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-teal">📤</div>
+      <h3>Assignment Submission</h3>
+      <p>Students submit assignments digitally. Teachers grade, annotate, and return work with feedback — all tracked with deadlines and submission status.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-gold">📊</div>
+      <h3>Performance Tracking</h3>
+      <p>Comprehensive dashboards tracking grades, attendance, test scores, and improvement trends. Visual reports for teachers, students, and parents.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-navy">💬</div>
+      <h3>Communication Hub</h3>
+      <p>Built-in messaging, announcements, parent notifications, and discussion forums. Connects the entire school community in one secure platform.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-purple">☁️</div>
+      <h3>Cloud-Based & Secure</h3>
+      <p>Hosted on secure cloud infrastructure with end-to-end encryption, daily backups, GDPR compliance, and 99.9% uptime SLA.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-teal">📡</div>
+      <h3>Offline Learning Support</h3>
+      <p>Downloadable content for offline access. Students continue learning without internet — syncs automatically when reconnected.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-header">
+    <div class="section-eyebrow">How It Works</div>
+    <h2 class="section-title">Up & Running in Days, Not Months</h2>
+    <p class="section-subtitle">Our streamlined onboarding process gets your institution fully operational quickly with dedicated support at every step.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Consultation & Customization</h3>
+        <p>We meet your team to understand your institution's structure, workflows, and unique requirements. We then configure the platform to match your academic calendar, grading system, and branding.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Data Migration & Setup</h3>
+        <p>Our team handles importing existing student records, staff data, course structures, and historical data. Zero disruption to your ongoing academic activities.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Training & Onboarding</h3>
+        <p>Comprehensive training sessions for administrators, teachers, students, and parents. We provide video guides, documentation, and live support to ensure smooth adoption.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Go Live & Ongoing Support</h3>
+        <p>Launch your platform with confidence. Our 24/7 support team and dedicated account manager ensure your institution always has expert help available.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IS IT FOR -->
+<section class="audience" id="audience">
+  <div class="section-header centered">
+    <div class="section-eyebrow">Built For</div>
+    <h2 class="section-title">Every Kind of Educational Institution</h2>
+    <p class="section-subtitle">Whether you're a small coaching center or a large university, RW EduPlatform scales to your needs.</p>
+  </div>
+  <div class="audience-grid">
+    <div class="audience-card">
+      <span class="audience-emoji">🏫</span>
+      <h3>Schools</h3>
+      <p>K-12 institutions managing students from multiple grades with parent communication and attendance.</p>
+    </div>
+    <div class="audience-card">
+      <span class="audience-emoji">🎓</span>
+      <h3>Colleges</h3>
+      <p>Degree programs with complex timetables, elective subjects, and semester-based performance tracking.</p>
+    </div>
+    <div class="audience-card">
+      <span class="audience-emoji">🏛️</span>
+      <h3>Universities</h3>
+      <p>Large-scale deployments with departments, faculties, research modules, and multi-campus support.</p>
+    </div>
+    <div class="audience-card">
+      <span class="audience-emoji">📐</span>
+      <h3>Coaching Centers</h3>
+      <p>Test-prep and competitive exam centers with batch management, mock tests, and progress analytics.</p>
+    </div>
+    <div class="audience-card">
+      <span class="audience-emoji">💻</span>
+      <h3>Online Academies</h3>
+      <p>Fully digital-first institutions delivering courses, certifications, and live classes remotely.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD PREVIEW -->
+<section class="preview" id="preview">
+  <div class="section-header">
+    <div class="section-eyebrow">Live Dashboard</div>
+    <h2 class="section-title">Powerful Command Center for Educators</h2>
+    <p class="section-subtitle">A real-time overview of your institution — attendance, performance, and operations at a glance.</p>
+  </div>
+  <div class="dashboard-mockup">
+    <div class="db-topbar">
+      <div class="db-dots">
+        <div class="db-dot r"></div><div class="db-dot y"></div><div class="db-dot g"></div>
+      </div>
+      <div class="db-bar">https://app.rweduplatform.com/admin/dashboard</div>
+    </div>
+    <div class="db-body">
+      <div class="db-sidebar">
+        <div class="db-nav-item active"><span class="db-nav-icon">◈</span> Overview</div>
+        <div class="db-nav-item"><span class="db-nav-icon">◉</span> Students</div>
+        <div class="db-nav-item"><span class="db-nav-icon">◫</span> Courses</div>
+        <div class="db-nav-item"><span class="db-nav-icon">◷</span> Attendance</div>
+        <div class="db-nav-item"><span class="db-nav-icon">◌</span> Exams</div>
+        <div class="db-nav-item"><span class="db-nav-icon">◱</span> Assignments</div>
+        <div class="db-nav-item"><span class="db-nav-icon">◎</span> Analytics</div>
+        <div class="db-nav-item"><span class="db-nav-icon">◑</span> Staff</div>
+        <div class="db-nav-item"><span class="db-nav-icon">◈</span> Messages</div>
+        <div class="db-nav-item"><span class="db-nav-icon">⚙</span> Settings</div>
+      </div>
+      <div class="db-main">
+        <div class="db-greeting">Institution Overview — June 2025</div>
+        <div class="db-date">Academic Year 2024–25 | Summer Term Active</div>
+        <div class="db-metrics" style="grid-template-columns: repeat(4,1fr);">
+          <div class="db-metric">
+            <div class="db-metric-label">Total Students</div>
+            <div class="db-metric-num">3,847</div>
+            <div class="db-metric-change">↑ 5.2% YoY</div>
+          </div>
+          <div class="db-metric">
+            <div class="db-metric-label">Staff Members</div>
+            <div class="db-metric-num">214</div>
+            <div class="db-metric-change">↑ 8 new</div>
+          </div>
+          <div class="db-metric">
+            <div class="db-metric-label">Live Courses</div>
+            <div class="db-metric-num">142</div>
+            <div class="db-metric-change" style="color: var(--gold);">12 pending</div>
+          </div>
+          <div class="db-metric">
+            <div class="db-metric-label">Avg. Score</div>
+            <div class="db-metric-num">76.4%</div>
+            <div class="db-metric-change">↑ 3.1%</div>
+          </div>
+        </div>
+        <div class="db-row">
+          <div class="db-panel">
+            <div class="db-panel-title">Subject Performance</div>
+            <div class="db-bar-row">
+              <div class="db-bar-label"><span>Mathematics</span><span>79%</span></div>
+              <div class="db-bar-track"><div class="db-bar-fill" style="width:79%; background: var(--teal);"></div></div>
+            </div>
+            <div class="db-bar-row">
+              <div class="db-bar-label"><span>Sciences</span><span>83%</span></div>
+              <div class="db-bar-track"><div class="db-bar-fill" style="width:83%; background: #A78BFA;"></div></div>
+            </div>
+            <div class="db-bar-row">
+              <div class="db-bar-label"><span>English</span><span>88%</span></div>
+              <div class="db-bar-track"><div class="db-bar-fill" style="width:88%; background: var(--gold);"></div></div>
+            </div>
+            <div class="db-bar-row">
+              <div class="db-bar-label"><span>Social Studies</span><span>71%</span></div>
+              <div class="db-bar-track"><div class="db-bar-fill" style="width:71%; background: #F87171;"></div></div>
+            </div>
+            <div class="db-bar-row">
+              <div class="db-bar-label"><span>Computer Science</span><span>91%</span></div>
+              <div class="db-bar-track"><div class="db-bar-fill" style="width:91%; background: #34D399;"></div></div>
+            </div>
+          </div>
+          <div class="db-panel">
+            <div class="db-panel-title">Recent Activity</div>
+            <div class="db-student">
+              <div class="db-avatar av1">✓</div>
+              <div class="db-student-name">Physics test submitted — Class 11B</div>
+              <div class="db-student-score" style="font-size:10px; color: rgba(255,255,255,0.35);">2m</div>
+            </div>
+            <div class="db-student">
+              <div class="db-avatar av2">📎</div>
+              <div class="db-student-name">New material uploaded — Math XII</div>
+              <div class="db-student-score" style="font-size:10px; color: rgba(255,255,255,0.35);">15m</div>
+            </div>
+            <div class="db-student">
+              <div class="db-avatar av3">📢</div>
+              <div class="db-student-name">Announcement — Holiday notice</div>
+              <div class="db-student-score" style="font-size:10px; color: rgba(255,255,255,0.35);">1h</div>
+            </div>
+            <div class="db-student">
+              <div class="db-avatar av4">👤</div>
+              <div class="db-student-name">24 new student registrations</div>
+              <div class="db-student-score" style="font-size:10px; color: rgba(255,255,255,0.35);">3h</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="stack" id="stack">
+  <div class="section-header centered">
+    <div class="section-eyebrow">Technology Stack</div>
+    <h2 class="section-title">Built with Modern, Proven Technologies</h2>
+    <p class="section-subtitle">RW EduPlatform is engineered on a robust, scalable stack — delivering speed, security, and reliability at every layer.</p>
+  </div>
+  <div class="stack-grid">
+    <div class="stack-pill"><div class="stack-dot dot-react"></div> React.js</div>
+    <div class="stack-pill"><div class="stack-dot dot-django"></div> Django REST Framework</div>
+    <div class="stack-pill"><div class="stack-dot dot-pg"></div> PostgreSQL</div>
+    <div class="stack-pill"><div class="stack-dot dot-js"></div> JavaScript ES2024</div>
+    <div class="stack-pill"><div class="stack-dot dot-html"></div> HTML5</div>
+    <div class="stack-pill"><div class="stack-dot dot-css"></div> CSS3</div>
+    <div class="stack-pill"><div class="stack-dot dot-cloud"></div> Cloud Hosting</div>
+    <div class="stack-pill"><div class="stack-dot dot-api"></div> RESTful APIs</div>
+    <div class="stack-pill"><div class="stack-dot" style="background:#FF5733"></div> Redis Cache</div>
+    <div class="stack-pill"><div class="stack-dot" style="background:#44A8B3"></div> Docker</div>
+    <div class="stack-pill"><div class="stack-dot" style="background:#326CE5"></div> Kubernetes</div>
+    <div class="stack-pill"><div class="stack-dot" style="background:#FF9900"></div> AWS / Azure</div>
+    <div class="stack-pill"><div class="stack-dot" style="background:#764ABC"></div> Redux State</div>
+    <div class="stack-pill"><div class="stack-dot" style="background:#009688"></div> WebSockets</div>
+    <div class="stack-pill"><div class="stack-dot" style="background:#F05032"></div> Git Version Control</div>
+    <div class="stack-pill"><div class="stack-dot" style="background:#0078D4"></div> Microsoft SSO</div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-header centered">
+    <div class="section-eyebrow">Testimonials</div>
+    <h2 class="section-title">Trusted by Educators Everywhere</h2>
+    <p class="section-subtitle">Hear from the institutions that have transformed their academic operations with RW EduPlatform.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-quote">RW EduPlatform revolutionized how we manage our 2,000+ students. The attendance module alone saved us hours every week, and parents love the real-time updates.</p>
+      <div class="testi-author">
+        <div class="testi-avatar tav1">RP</div>
+        <div>
+          <div class="testi-name">Dr. Rajesh Patel</div>
+          <div class="testi-role">Principal, Sunrise International School</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-quote">The online test module is outstanding. We run competitive exam practice for 800 students simultaneously with zero lag. The analytics help us identify struggling students early.</p>
+      <div class="testi-author">
+        <div class="testi-avatar tav2">FA</div>
+        <div>
+          <div class="testi-name">Fatima Al-Hassan</div>
+          <div class="testi-role">Director, Excel Coaching Academy</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-quote">Migrating our college to RW EduPlatform was seamless. The RW team handled everything and trained all our faculty within two days. The support team is incredibly responsive.</p>
+      <div class="testi-author">
+        <div class="testi-avatar tav3">KM</div>
+        <div>
+          <div class="testi-name">Prof. Krishna Murthy</div>
+          <div class="testi-role">Dean, Horizon Engineering College</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <h2>Ready to <em>Modernize</em> Your Institution?</h2>
+  <p>Join 500+ schools, colleges, and institutes already using RW EduPlatform. Get started with a free personalized demo today.</p>
+  <div class="cta-email-row">
+    <input class="cta-input" type="email" placeholder="Enter your institutional email" />
+    <button class="cta-submit">Request Demo</button>
+  </div>
+  <div class="cta-actions">
+    <a href="https://rwsoftwaredevelopment.com" class="btn-primary" target="_blank" rel="noopener">Visit rwsoftwaredevelopment.com</a>
+    <a href="tel:+91" class="btn-outline">📞 Call Our Team</a>
+  </div>
+  <p style="font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 24px;">No credit card required · Free 30-day trial · Dedicated onboarding support</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3>RW <span>Edu</span>Platform</h3>
+      <p>A product of RW Software Development — building smart, scalable digital solutions for educational institutions across India and beyond.</p>
+      <p style="margin-top: 12px; font-size: 12px;">🌐 rwsoftwaredevelopment.com</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#preview">Dashboard</a></li>
+        <li><a href="#stack">Technology</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#">Pricing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Solutions</h4>
+      <ul>
+        <li><a href="#">For Schools</a></li>
+        <li><a href="#">For Colleges</a></li>
+        <li><a href="#">For Universities</a></li>
+        <li><a href="#">For Coaching</a></li>
+        <li><a href="#">Online Academies</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="https://rwsoftwaredevelopment.com" target="_blank" rel="noopener">About RW Software</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Case Studies</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 RW Software Development. All rights reserved.</span>
+    <span>Built with ❤️ in India | <a href="https://rwsoftwaredevelopment.com" target="_blank" rel="noopener">rwsoftwaredevelopment.com</a></span>
+  </div>
+</footer>
+
+<!-- RW EduPlatform Backend API Client -->
+<script src="api.js"></script>
+
+<script>
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Nav active state on scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      nav.style.background = 'rgba(11,26,62,0.99)';
+    } else {
+      nav.style.background = 'rgba(11,26,62,0.96)';
+    }
+  });
+
+  // Intersection Observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.feature-card, .testi-card, .audience-card, .step').forEach(el => {
+    el.style.opacity = '0';
+    observer.observe(el);
+  });
+
+  // CTA form handled by api.js (DemoAPI.submit)
+</script>
+</body>
+</html>
